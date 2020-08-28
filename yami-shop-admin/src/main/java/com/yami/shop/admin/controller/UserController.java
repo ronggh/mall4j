@@ -12,7 +12,6 @@ package com.yami.shop.admin.controller;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.UUID;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

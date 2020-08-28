@@ -10,23 +10,17 @@
 
 package com.yami.shop.security.service;
 
-import com.yami.shop.security.constants.SecurityConstants;
-import lombok.SneakyThrows;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
-import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-
 import javax.sql.DataSource;
+
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 
 /**
  * @author
- * @tate 2019/03/30
- * 获取客户端
+ * @tate 2019/03/30 获取客户端
  */
 public class YamiClientDetailsService extends JdbcClientDetailsService {
 
-	public YamiClientDetailsService(DataSource dataSource) {
-		super(dataSource);
-	}
+    public YamiClientDetailsService(DataSource dataSource) {
+        super(dataSource);
+    }
 }
