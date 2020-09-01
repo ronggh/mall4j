@@ -14,7 +14,7 @@ package com.yami.shop.admin.security;
 // @EnableResourceServer
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
 // public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
-//
+
 // @Autowired
 // private LoginAuthenticationFilter loginAuthenticationFilter;
 //
@@ -40,12 +40,12 @@ package com.yami.shop.admin.security;
 //                        "/swagger-ui.html",
 //                        "/swagger-resources/**",
 //                        "/captcha.jpg").permitAll()
-//               
+//
 //                .and()
 //                .authorizeRequests()
 //                //配置所有访问控制，必须认证过后才可以访问
 //                .antMatchers("/**").authenticated();
-//                
+//
 //        // @formatter:on 
 //
 // }

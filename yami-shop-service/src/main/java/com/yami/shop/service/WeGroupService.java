@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.vo.WeGroupVO;
 
 public interface WeGroupService extends IService<WeGroup> {
     /**
@@ -13,7 +14,7 @@ public interface WeGroupService extends IService<WeGroup> {
      * @param verifyFlag
      * @return
      */
-    Page<WeGroup> getWeGroupList(BaseDTO dto, String verifyFlag);
+    Page<WeGroupVO> getWeGroupList(BaseDTO dto, String verifyFlag);
 
     /**
      * 设置群审核状态

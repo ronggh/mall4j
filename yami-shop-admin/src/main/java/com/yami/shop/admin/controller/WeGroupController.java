@@ -1,5 +1,7 @@
 package com.yami.shop.admin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.yami.shop.bean.dto.BaseDTO;
+import com.yami.shop.bean.dto.WeGroupAdminDTO;
 import com.yami.shop.bean.dto.WeGroupDTO;
 import com.yami.shop.bean.enums.WeGroupVerifyFlag;
-import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.vo.WeGroupVO;
+import com.yami.shop.service.WeGroupMemberService;
 import com.yami.shop.service.WeGroupService;
 
 import io.swagger.annotations.Api;
@@ -25,28 +29,30 @@ import io.swagger.annotations.ApiOperation;
 public class WeGroupController {
     @Autowired
     private WeGroupService weGroupService;
+    @Autowired
+    private WeGroupMemberService weGroupMemberService;
 
     @ApiOperation(position = 1, value = "1-获取未审核的社群列表", notes = "获取未审核的社群列表")
     @RequestMapping(value = "/list/nonVerifyList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:nonVerifyList')")
-    public ResponseEntity<Page<WeGroup>> nonVerifyList(@RequestBody BaseDTO dto) {
-        Page<WeGroup> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.NONVERIFY.value());
+    public ResponseEntity<Page<WeGroupVO>> nonVerifyList(@RequestBody BaseDTO dto) {
+        Page<WeGroupVO> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.NONVERIFY.value());
         return ResponseEntity.ok(list);
     }
 
     @ApiOperation(position = 2, value = "2-获取审核通过的社群列表", notes = "获取审核通过的社群列表")
     @RequestMapping(value = "/list/verifiedList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:verifiedList')")
-    public ResponseEntity<Page<WeGroup>> verifiedList(@RequestBody BaseDTO dto) {
-        Page<WeGroup> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.VERIFIED.value());
+    public ResponseEntity<Page<WeGroupVO>> verifiedList(@RequestBody BaseDTO dto) {
+        Page<WeGroupVO> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.VERIFIED.value());
         return ResponseEntity.ok(list);
     }
 
     @ApiOperation(position = 3, value = "3-获取审核未通过的社群列表", notes = "获取审核未通过的社群列表")
     @RequestMapping(value = "/list/unverifiedList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:unverifiedList')")
-    public ResponseEntity<Page<WeGroup>> unverifiedList(@RequestBody BaseDTO dto) {
-        Page<WeGroup> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.UNVERIFIED.value());
+    public ResponseEntity<Page<WeGroupVO>> unverifiedList(@RequestBody BaseDTO dto) {
+        Page<WeGroupVO> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.UNVERIFIED.value());
         return ResponseEntity.ok(list);
     }
 
@@ -100,6 +106,16 @@ public class WeGroupController {
     public ResponseEntity<Void> openGroup(@RequestBody WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
         weGroupService.setGroupStatus(groupId, "1");
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(position = 9, value = "9-设置群管理员", notes = "设置群管理员")
+    @RequestMapping(value = "/info/setGroupAdmins", method = RequestMethod.POST)
+    @PreAuthorize("@pms.hasPermission('group:info:setGroupAdmins')")
+    public ResponseEntity<Void> setGroupAdmins(@RequestBody WeGroupAdminDTO dto) {
+        Integer groupId = dto.getGroupId();
+        List<Integer> uidList = dto.getUidList();
+        weGroupMemberService.setGroupAdmins(groupId, uidList);
         return ResponseEntity.ok().build();
     }
 

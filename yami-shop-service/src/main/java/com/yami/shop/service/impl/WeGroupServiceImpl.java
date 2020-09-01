@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.vo.WeGroupVO;
 import com.yami.shop.dao.WeGroupMapper;
 import com.yami.shop.service.WeGroupService;
 
@@ -26,11 +27,11 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
      * @return
      */
     @Override
-    public Page<WeGroup> getWeGroupList(BaseDTO dto, String verifyFlag) {
-        Page<WeGroup> page = new Page<>();
+    public Page<WeGroupVO> getWeGroupList(BaseDTO dto, String verifyFlag) {
+        Page<WeGroupVO> page = new Page<>();
         page.setCurrent(dto.getCurrentPage());
         page.setSize(dto.getPageSize());
-        List<WeGroup> list = weGroupMapper.getWeGroupList(page, verifyFlag);
+        List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag);
         page.setRecords(list);
         return page;
     }

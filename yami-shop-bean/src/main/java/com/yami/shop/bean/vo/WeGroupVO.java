@@ -26,6 +26,14 @@ public class WeGroupVO implements Serializable {
 
     @ApiModelProperty(value = "审核标志")
     private String verifyFlag;
+    @ApiModelProperty(value = "新增成员提醒")
+    private String memberTip;
+
+    @ApiModelProperty(value = "发布消息提醒")
+    private String noteTip;
+
+    @ApiModelProperty(value = "社群标签")
+    private String groupMark;
 
     @ApiModelProperty(value = "创建群的用户id")
     private Integer createUid;
@@ -41,12 +49,4 @@ public class WeGroupVO implements Serializable {
     @ApiModelProperty(value = "群所属的学校中文名称")
     private String schoolCnname;
 
-    @ApiModelProperty(value = "新增成员提醒")
-    private String memberTip;
-
-    @ApiModelProperty(value = "发布消息提醒")
-    private String noteTip;
-
-    @ApiModelProperty(value = "社群标签")
-    private String groupMark;
 }
