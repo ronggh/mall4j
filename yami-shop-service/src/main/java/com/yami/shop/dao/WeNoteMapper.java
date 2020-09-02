@@ -51,6 +51,6 @@ public interface WeNoteMapper extends BaseMapper<WeNote> {
      * @param noteId
      * @return
      */
-    @Select("select note_id,img_url,img_order from we_note_image where status='1' and note_id=#{noteId}")
+    @Select("select note_id,img_url,img_order from we_note_image where status='1' and note_id=#{noteId} order by img_order")
     List<WeNoteImageVO> getNoteImageList(@Param("noteId") Integer noteId);
 }

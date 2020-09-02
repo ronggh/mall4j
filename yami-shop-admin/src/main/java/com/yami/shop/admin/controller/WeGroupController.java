@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.dto.WeGroupAdminDTO;
 import com.yami.shop.bean.dto.WeGroupDTO;
@@ -24,6 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(tags = {"社群管理"})
+@EnableKnife4j
 @RestController
 @RequestMapping("/group")
 public class WeGroupController {
@@ -89,7 +91,7 @@ public class WeGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(position = 7, value = "7-关群", notes = "关闭群")
+    @ApiOperation(position = 7, value = "7-关闭群", notes = "关闭群")
     @ApiOperationSupport(includeParameters = {"dto.groupId"})
     @RequestMapping(value = "/info/closeGroup", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:closeGroup')")
