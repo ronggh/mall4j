@@ -23,6 +23,6 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
             + " from weback_group g,weback_user u "
             + " where g.create_uid = u.uid and g.verify_flag=#{verifyFlag}) as gu "
             + " LEFT OUTER JOIN weback_school s "
-            + " on gu.school_id = s.school_id")
-    List<WeGroupVO> getWeGroupList(Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag);
+            + " on gu.school_id = s.school_id ")
+    List<WeGroupVO> getWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag);
 }

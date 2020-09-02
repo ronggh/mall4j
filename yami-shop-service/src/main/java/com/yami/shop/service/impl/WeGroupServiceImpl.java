@@ -28,11 +28,15 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
      */
     @Override
     public Page<WeGroupVO> getWeGroupList(BaseDTO dto, String verifyFlag) {
+        //
         Page<WeGroupVO> page = new Page<>();
         page.setCurrent(dto.getCurrentPage());
         page.setSize(dto.getPageSize());
+
+        //
         List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag);
         page.setRecords(list);
+
         return page;
     }
 
@@ -49,6 +53,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         weGroup.setVerifyFlag(verifyFlag);
         weGroup.setUpdatetime(LocalDateTime.now());
         weGroupMapper.updateById(weGroup);
+
     }
 
     /***
