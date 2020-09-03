@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.dto.WeGroupAdminDTO;
 import com.yami.shop.bean.dto.WeGroupDTO;
@@ -24,8 +23,11 @@ import com.yami.shop.service.WeGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+
+/***
+ * @author YaJie
+ */
 @Api(tags = {"社群管理"})
-@EnableKnife4j
 @RestController
 @RequestMapping("/group")
 public class WeGroupController {
@@ -34,6 +36,11 @@ public class WeGroupController {
     @Autowired
     private WeGroupMemberService weGroupMemberService;
 
+    /**
+     * 获取未审核的社群列表
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 1, value = "1-获取未审核的社群列表", notes = "获取未审核的社群列表")
     @RequestMapping(value = "/list/nonVerifyList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:nonVerifyList')")
@@ -42,6 +49,11 @@ public class WeGroupController {
         return ResponseEntity.ok(list);
     }
 
+    /**
+     * 获取审核通过的社群列表
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 2, value = "2-获取审核通过的社群列表", notes = "获取审核通过的社群列表")
     @RequestMapping(value = "/list/verifiedList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:verifiedList')")
@@ -50,6 +62,11 @@ public class WeGroupController {
         return ResponseEntity.ok(list);
     }
 
+    /**
+     * 获取审核未通过的社群列表
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 3, value = "3-获取审核未通过的社群列表", notes = "获取审核未通过的社群列表")
     @RequestMapping(value = "/list/unverifiedList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:unverifiedList')")
@@ -58,67 +75,96 @@ public class WeGroupController {
         return ResponseEntity.ok(list);
     }
 
-    @ApiOperation(position = 4, value = "4-审核社群", notes = "1：设置为通过审核，2：审核未通过")
+    /**
+     * 审核社群
+     * @param dto
+     * @return
+     */
+    @ApiOperation(position = 4, value = "4-审核社群", notes = "审核社群,verifyFlag = 1,设置为通过审核; verifyFlag = 2 ,审核未通过")
     @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.verifyFlag"})
     @RequestMapping(value = "/info/verify", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:verify')")
-    public ResponseEntity<Void> verify(@RequestBody WeGroupDTO dto) {
+    public ResponseEntity<String> verify(@RequestBody WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
         String verifyFlag = dto.getVerifyFlag();
         weGroupService.verifyWeGroup(groupId, verifyFlag);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("success");
     }
 
+    /**
+     * 关联学校
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 5, value = "5-关联学校", notes = "社群关联到学校")
     @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.schoolId"})
     @RequestMapping(value = "/info/relateSchool", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:relateSchool')")
-    public ResponseEntity<Void> relateSchool(@RequestBody WeGroupDTO dto) {
+    public ResponseEntity<String> relateSchool(@RequestBody WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
         Integer schoolId = dto.getSchoolId();
         weGroupService.relateSchool(groupId, schoolId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("success");
     }
 
-    @ApiOperation(position = 6, value = "6-设置群标签", notes = "多个时用逗号分隔")
+    /**
+     * 设置群标签
+     * @param dto
+     * @return
+     */
+    @ApiOperation(position = 6, value = "6-设置群标签", notes = "设置群标签,多个时用逗号分隔")
     @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.groupMark"})
     @RequestMapping(value = "/info/setGroupMark", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:setGroupMark')")
-    public ResponseEntity<Void> setGroupMark(@RequestBody WeGroupDTO dto) {
+    public ResponseEntity<String> setGroupMark(@RequestBody WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
         String groupMark = dto.getGroupMark();
         weGroupService.setGroupMark(groupId, groupMark);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("success");
     }
 
+    /**
+     * 关闭群
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 7, value = "7-关闭群", notes = "关闭群")
     @ApiOperationSupport(includeParameters = {"dto.groupId"})
     @RequestMapping(value = "/info/closeGroup", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:closeGroup')")
-    public ResponseEntity<Void> closeGroup(@RequestBody WeGroupDTO dto) {
+    public ResponseEntity<String> closeGroup(@RequestBody WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
         weGroupService.setGroupStatus(groupId, "0");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("success");
     }
 
+    /**
+     * 解禁群
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 8, value = "8-解禁群", notes = "解禁群")
     @ApiOperationSupport(includeParameters = {"dto.groupId"})
     @RequestMapping(value = "/info/openGroup", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:openGroup')")
-    public ResponseEntity<Void> openGroup(@RequestBody WeGroupDTO dto) {
+    public ResponseEntity<String> openGroup(@RequestBody WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
         weGroupService.setGroupStatus(groupId, "1");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("success");
     }
 
+    /**
+     * 设置群管理员
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 9, value = "9-设置群管理员", notes = "设置群管理员")
     @RequestMapping(value = "/info/setGroupAdmins", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:info:setGroupAdmins')")
-    public ResponseEntity<Void> setGroupAdmins(@RequestBody WeGroupAdminDTO dto) {
+    public ResponseEntity<String> setGroupAdmins(@RequestBody WeGroupAdminDTO dto) {
         Integer groupId = dto.getGroupId();
         List<Integer> uidList = dto.getUidList();
         weGroupMemberService.setGroupAdmins(groupId, uidList);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("success");
     }
-
 }

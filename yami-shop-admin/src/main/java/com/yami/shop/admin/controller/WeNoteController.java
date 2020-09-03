@@ -18,6 +18,9 @@ import com.yami.shop.service.WeNoteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+/***
+ * @author YaJie
+ */
 @Api(tags = {"笔记管理"})
 @RestController
 @RequestMapping("/note")
@@ -25,6 +28,11 @@ public class WeNoteController {
     @Autowired
     private WeNoteService weNoteService;
 
+    /**
+     * 搜索笔记列表
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 1, value = "1-搜索笔记列表", notes = "搜索显示笔记列表")
     @RequestMapping(value = "/list/noteList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('note:list:noteList')")
@@ -33,6 +41,11 @@ public class WeNoteController {
         return ResponseEntity.ok(list);
     }
 
+    /**
+     * 获取笔记详情
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 2, value = "2-获取笔记详情", notes = "获取笔记详情")
     @RequestMapping(value = "/list/noteDetail", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('note:list:noteDetail')")
@@ -42,6 +55,11 @@ public class WeNoteController {
         return ResponseEntity.ok(weNoteDetailVO);
     }
 
+    /**
+     * 删除指定的笔记
+     * @param dto
+     * @return
+     */
     @ApiOperation(position = 3, value = "3-删除指定的笔记", notes = "删除指定的笔记")
     @RequestMapping(value = "/info/delNote", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('note:info:delNote')")

@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("weback_group_member")
+@TableName("we_group_member")
 public class WeGroupMember implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -13,7 +13,7 @@ public interface WeGroupMemberMapper extends BaseMapper<WeGroupMember> {
      * 
      * @param groupId
      */
-    @Update("update weback_group_member set user_role='2' where status='1' and group_id=#{groupId}")
+    @Update("update we_group_member set user_role='2' where status='1' and group_id=#{groupId}")
     void clearGroupAdmins(@Param("groupId") Integer groupId);
 
     /**
@@ -22,7 +22,7 @@ public interface WeGroupMemberMapper extends BaseMapper<WeGroupMember> {
      * @param groupId
      * @param uidList
      */
-    @Update("<script>" + " update weback_group_member set user_role='1' where status='1' "
+    @Update("<script>" + " update we_group_member set user_role='1' where status='1' "
         + " and group_id =#{groupId} and uid in "
         + "<foreach item='item' index='index' collection='uidList' open='(' separator=',' close=')'>"
             + "#{item}"

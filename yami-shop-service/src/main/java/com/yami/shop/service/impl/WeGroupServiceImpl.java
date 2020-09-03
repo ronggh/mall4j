@@ -48,12 +48,13 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
      */
     @Override
     public void verifyWeGroup(Integer groupId, String verifyFlag) {
+        //
         WeGroup weGroup = new WeGroup();
         weGroup.setGroupId(groupId);
         weGroup.setVerifyFlag(verifyFlag);
         weGroup.setUpdatetime(LocalDateTime.now());
+        //
         weGroupMapper.updateById(weGroup);
-
     }
 
     /***
