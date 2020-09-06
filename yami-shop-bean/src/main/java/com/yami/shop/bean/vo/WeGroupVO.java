@@ -1,6 +1,7 @@
 package com.yami.shop.bean.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -48,5 +49,20 @@ public class WeGroupVO implements Serializable {
     private String schoolEnname;
     @ApiModelProperty(value = "群所属的学校中文名称")
     private String schoolCnname;
+
+    /**
+     * 社群成员列表
+     */
+    @ApiModelProperty(value = "社群成员列表")
+    List<WeGroupUserVO> groupMembers;
+
+    /**
+     * 社群管理员列表
+     */
+    @ApiModelProperty(value = "社群管理员列表")
+    List<WeGroupUserVO> groupAdmins;
+
+
+
 
 }

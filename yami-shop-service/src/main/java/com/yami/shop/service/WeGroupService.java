@@ -3,6 +3,7 @@ package com.yami.shop.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yami.shop.bean.dto.BaseDTO;
+import com.yami.shop.bean.dto.WeGroupDTO;
 import com.yami.shop.bean.model.WeGroup;
 import com.yami.shop.bean.vo.WeGroupVO;
 
@@ -17,12 +18,25 @@ public interface WeGroupService extends IService<WeGroup> {
     Page<WeGroupVO> getWeGroupList(BaseDTO dto, String verifyFlag);
 
     /**
+     * 搜索所有的被关闭的社群
+     * @param dto
+     * @return
+     */
+    Page<WeGroupVO> getClosedWeGroupList(WeGroupDTO dto);
+
+    /**
      * 设置群审核状态
      * 
      * @param groupId
      * @param verifyFlag
      */
     void verifyWeGroup(Integer groupId, String verifyFlag);
+
+    /**
+     * 设置群：包括群标签、关联学校、设置管理员
+     * @param dto
+     */
+    void adminGroup(WeGroupDTO dto);
 
     /**
      * 社群关联到学校
@@ -47,4 +61,13 @@ public interface WeGroupService extends IService<WeGroup> {
      * @param groupStatus：“1”：有效群；“0”：无效群
      */
     void setGroupStatus(Integer groupId, String groupStatus);
+
+    /**
+     * 根据groupId获取社群详细信息，包括成员和管理员列表
+     * @param groupId
+     * @return
+     */
+    WeGroupVO getGroupDetail(Integer groupId);
+
+
 }
