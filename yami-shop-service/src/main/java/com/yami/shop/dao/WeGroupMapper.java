@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupUserVO;
 import com.yami.shop.bean.vo.WeGroupVO;
 
@@ -17,15 +18,16 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
      * 
      * @param page
      * @param verifyFlag
+     * @param groupName
      * @return
      */
     @Select("select gu.group_id,gu.group_name,gu.group_desc,gu.apply_reason,gu.group_head_img,gu.verify_flag,gu.group_mark,gu.member_tip,gu.note_tip,gu.create_uid,gu.nickname,gu.real_name,gu.school_id,s.school_enname,s.school_cnname "
             + " from ( select g.group_id,g.group_name,g.group_desc,g.apply_reason,g.group_head_img,g.verify_flag,g.group_mark,g.member_tip,g.note_tip,g.create_uid,u.nickname,u.real_name,g.school_id "
             + " from we_group g,we_user u "
-            + " where g.create_uid = u.uid and g.verify_flag=#{verifyFlag} and g.status = '1' ) as gu "
+            + " where g.create_uid = u.uid and g.verify_flag=#{verifyFlag} and g.status = '1' and g.group_name like #{groupName}) as gu "
             + " LEFT OUTER JOIN we_school s "
             + " on gu.school_id = s.school_id ")
-    List<WeGroupVO> getWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag);
+    List<WeGroupVO> getWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag,@Param("groupName") String groupName);
 
     /**
      * 根据名称，搜索被关闭的社群列表，分页显示
@@ -70,4 +72,15 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
     )
     List<WeGroupUserVO> getGroupMemberList(@Param("groupId") Integer groupId,@Param("userRole") String userRole);
 
+    /**
+     *
+     * @param schoolName
+     * @return
+     */
+    @Select("select school_id, school_cnname ,school_enname "
+            +" from we_school "
+            +" where status ='1' and school_cnname is not null "
+            + " and (school_cnname like #{schoolName} or school_enname like #{schoolName})"
+            + " order by convert(school_cnname using gbk) ")
+    List<WeGroupSchoolVO> getAllSchoolList(@Param("schoolName") String schoolName);
 }

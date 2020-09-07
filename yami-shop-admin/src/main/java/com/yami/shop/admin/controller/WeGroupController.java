@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.dto.WeGroupAdminDTO;
 import com.yami.shop.bean.dto.WeGroupDTO;
+import com.yami.shop.bean.dto.WeGroupSchoolDTO;
 import com.yami.shop.bean.enums.WeGroupVerifyFlag;
+import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupVO;
 import com.yami.shop.service.WeGroupMemberService;
 import com.yami.shop.service.WeGroupService;
@@ -44,7 +45,8 @@ public class WeGroupController {
     @ApiOperation(position = 1, value = "1-获取未审核的社群列表", notes = "获取未审核的社群列表")
     @RequestMapping(value = "/list/nonVerifyList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:nonverify')")
-    public ResponseEntity<Page<WeGroupVO>> nonVerifyList(@RequestBody BaseDTO dto) {
+    @ApiOperationSupport(includeParameters = {"dto.groupName","dto.currentPage","dto.pageSize"})
+    public ResponseEntity<Page<WeGroupVO>> nonVerifyList(@RequestBody WeGroupDTO dto) {
         Page<WeGroupVO> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.NONVERIFY.value());
         return ResponseEntity.ok(list);
     }
@@ -57,7 +59,8 @@ public class WeGroupController {
     @ApiOperation(position = 2, value = "2-获取审核通过的社群列表", notes = "获取审核通过的社群列表")
     @RequestMapping(value = "/list/verifiedList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:verified')")
-    public ResponseEntity<Page<WeGroupVO>> verifiedList(@RequestBody BaseDTO dto) {
+    @ApiOperationSupport(includeParameters = {"dto.groupName","dto.currentPage","dto.pageSize"})
+    public ResponseEntity<Page<WeGroupVO>> verifiedList(@RequestBody WeGroupDTO dto) {
         Page<WeGroupVO> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.VERIFIED.value());
         return ResponseEntity.ok(list);
     }
@@ -70,7 +73,8 @@ public class WeGroupController {
     @ApiOperation(position = 3, value = "3-获取审核未通过的社群列表", notes = "获取审核未通过的社群列表")
     @RequestMapping(value = "/list/unverifiedList", method = RequestMethod.POST)
     @PreAuthorize("@pms.hasPermission('group:list:unverified')")
-    public ResponseEntity<Page<WeGroupVO>> unverifiedList(@RequestBody BaseDTO dto) {
+    @ApiOperationSupport(includeParameters = {"dto.groupName","dto.currentPage","dto.pageSize"})
+    public ResponseEntity<Page<WeGroupVO>> unverifiedList(@RequestBody WeGroupDTO dto) {
         Page<WeGroupVO> list = weGroupService.getWeGroupList(dto, WeGroupVerifyFlag.UNVERIFIED.value());
         return ResponseEntity.ok(list);
     }
@@ -209,6 +213,16 @@ public class WeGroupController {
         Integer groupId = dto.getGroupId();
         weGroupService.setGroupStatus(groupId, "1");
         return ResponseEntity.ok("success");
+    }
+
+    @ApiOperation(position = 13, value = "13-获取学校列表", notes = "获取学校列表")
+    @RequestMapping(value = "/list/getSchoolList", method = RequestMethod.POST)
+    @PreAuthorize("@pms.hasPermission('group:info:adminGroup')")
+    @ApiOperationSupport(includeParameters = {"dto.schoolName"})
+    public ResponseEntity<List<WeGroupSchoolVO>> getSchoolList(@RequestBody WeGroupSchoolDTO dto) {
+        String  schoolName = dto.getSchoolName();
+        List<WeGroupSchoolVO> list = weGroupService.getAllSchoolList(schoolName);
+        return ResponseEntity.ok(list);
     }
 
 }

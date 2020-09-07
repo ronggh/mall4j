@@ -62,7 +62,4 @@ public class WeGroupVO implements Serializable {
     @ApiModelProperty(value = "社群管理员列表")
     List<WeGroupUserVO> groupAdmins;
 
-
-
-
 }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.dto.WeGroupDTO;
 import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupUserVO;
 import com.yami.shop.bean.vo.WeGroupVO;
 import com.yami.shop.dao.WeGroupMapper;
@@ -33,14 +33,19 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
      * @return
      */
     @Override
-    public Page<WeGroupVO> getWeGroupList(BaseDTO dto, String verifyFlag) {
+    public Page<WeGroupVO> getWeGroupList(WeGroupDTO dto, String verifyFlag) {
         //
         Page<WeGroupVO> page = new Page<>();
         page.setCurrent(dto.getCurrentPage());
         page.setSize(dto.getPageSize());
 
+        String groupName = dto.getGroupName();
+        String gName = "%%";
+        if(null != groupName && !"".equals(groupName)){
+            gName = "%"+groupName +"%";
+        }
         //
-        List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag);
+        List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag,gName);
         page.setRecords(list);
 
         return page;
@@ -152,6 +157,16 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
             weGroupMemberMapper.setGroupAdmins(groupId, admins);
         }
 
+    }
+
+    @Override
+    public List<WeGroupSchoolVO> getAllSchoolList(String schoolName){
+        String sName = "%%";
+        if( null != schoolName && !"".equals(schoolName)){
+            sName ="%" + schoolName +"%";
+        }
+        List<WeGroupSchoolVO> list = weGroupMapper.getAllSchoolList(sName);
+        return list;
     }
 
     /***

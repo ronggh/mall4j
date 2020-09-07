@@ -1,10 +1,12 @@
 package com.yami.shop.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yami.shop.bean.dto.BaseDTO;
 import com.yami.shop.bean.dto.WeGroupDTO;
 import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupVO;
 
 public interface WeGroupService extends IService<WeGroup> {
@@ -15,7 +17,14 @@ public interface WeGroupService extends IService<WeGroup> {
      * @param verifyFlag
      * @return
      */
-    Page<WeGroupVO> getWeGroupList(BaseDTO dto, String verifyFlag);
+    Page<WeGroupVO> getWeGroupList(WeGroupDTO dto, String verifyFlag);
+
+    /**
+     *
+     * @param schoolName
+     * @return
+     */
+    List<WeGroupSchoolVO> getAllSchoolList(String schoolName);
 
     /**
      * 搜索所有的被关闭的社群
