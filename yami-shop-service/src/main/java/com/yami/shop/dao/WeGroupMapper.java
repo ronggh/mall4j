@@ -14,7 +14,7 @@ import com.yami.shop.bean.vo.WeGroupVO;
 
 public interface WeGroupMapper extends BaseMapper<WeGroup> {
     /**
-     * 根据状态，获取未审核，审核通过，审核未通过的社群列表,分页显示
+     * 根据状态，获取未审核，审核通过，审核未通过、被关闭的社群列表,分页显示
      * 
      * @param page
      * @param verifyFlag
@@ -30,7 +30,8 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
     List<WeGroupVO> getWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag,@Param("groupName") String groupName);
 
     /**
-     * 根据名称，搜索被关闭的社群列表，分页显示
+     * 暂时没用
+     * 根据名称，搜索删除状态的社群列表，分页显示，支持世社群名称搜索
      * @param page
      * @param groupName
      * @return
@@ -41,7 +42,7 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
             + " where g.create_uid = u.uid and  g.status = '0' and g.group_name like #{groupName}) as gu "
             + " LEFT OUTER JOIN we_school s "
             + " on gu.school_id = s.school_id ")
-    List<WeGroupVO> getClosedWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("groupName") String groupName);
+    List<WeGroupVO> getDeletedWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("groupName") String groupName);
 
 
     /**
@@ -73,7 +74,7 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
     List<WeGroupUserVO> getGroupMemberList(@Param("groupId") Integer groupId,@Param("userRole") String userRole);
 
     /**
-     *
+     * 获取所有学校信息，支持按校名中英文搜索
      * @param schoolName
      * @return
      */

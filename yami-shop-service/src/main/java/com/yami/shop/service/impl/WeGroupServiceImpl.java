@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yami.shop.bean.dto.WeGroupDTO;
+import com.yami.shop.bean.enums.WeGroupVerifyFlag;
 import com.yami.shop.bean.model.WeGroup;
 import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupUserVO;
@@ -17,6 +18,9 @@ import com.yami.shop.dao.WeGroupMapper;
 import com.yami.shop.dao.WeGroupMemberMapper;
 import com.yami.shop.service.WeGroupService;
 
+/**
+ * @author : YaJie
+ */
 @Service
 public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> implements WeGroupService {
     @Autowired
@@ -26,7 +30,8 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     private WeGroupMemberMapper weGroupMemberMapper;
 
     /**
-     * 根据verifyFlag的值，分别获取未审核、审核通过、审核未通过的社群列表，分页显示
+     * 根据verifyFlag的值，分别获取未审核、审核通过、审核未通过、被关闭的社群列表，
+     * 分页显示，支持按社群名称搜索
      * 
      * @param dto
      * @param verifyFlag
@@ -52,13 +57,14 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     }
 
     /**
-     * 搜索所有的被关闭的社群
+     * 暂时没用
+     * 分页显示所有删除状态的社群，支持按社群名称搜索
      * 
      * @param dto
      * @return
      */
     @Override
-    public Page<WeGroupVO> getClosedWeGroupList(WeGroupDTO dto) {
+    public Page<WeGroupVO> getDeletedWeGroupList(WeGroupDTO dto) {
         Page<WeGroupVO> page = new Page<>();
         page.setCurrent(dto.getCurrentPage());
         page.setSize(dto.getPageSize());
@@ -69,7 +75,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         }
 
         //
-        List<WeGroupVO> list = weGroupMapper.getClosedWeGroupList(page, groupName);
+        List<WeGroupVO> list = weGroupMapper.getDeletedWeGroupList(page, groupName);
         page.setRecords(list);
 
         return page;
@@ -83,6 +89,12 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
      */
     @Override
     public void verifyWeGroup(Integer groupId, String verifyFlag) {
+        // 判断
+        if(groupId == null || groupId <= 0 )
+        {
+            return;
+        }
+
         //
         WeGroup weGroup = new WeGroup();
         weGroup.setGroupId(groupId);
@@ -93,10 +105,28 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     }
 
     /**
-     * 设置社群状态
+     * 解禁社群
+     * @param groupId
+     */
+    @Override
+    public void openGroup(Integer groupId){
+        verifyWeGroup(groupId,WeGroupVerifyFlag.VERIFIED.value());
+    }
+
+    /**
+     * 关闭社群
+     * @param groupId
+     */
+    @Override
+    public void closeGroup(Integer groupId){
+        verifyWeGroup(groupId,WeGroupVerifyFlag.CLOSED.value());
+    }
+    /**
+     * 暂时没用
+     * 设置社群删除状态
      *
      * @param groupId
-     * @param groupStatus：“1”：有效群；“0”：无效群
+     * @param groupStatus：“1”：有效数据；“0”：无效数据
      */
     @Override
     public void setGroupStatus(Integer groupId, String groupStatus) {
@@ -159,6 +189,11 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
 
     }
 
+    /**
+     * 获取所有学校列表，支持按学校中英文名称搜索
+     * @param schoolName
+     * @return
+     */
     @Override
     public List<WeGroupSchoolVO> getAllSchoolList(String schoolName){
         String sName = "%%";
@@ -167,35 +202,5 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         }
         List<WeGroupSchoolVO> list = weGroupMapper.getAllSchoolList(sName);
         return list;
-    }
-
-    /***
-     * 社群关联到学校
-     *
-     * @param groupId
-     * @param schoolId
-     */
-    @Override
-    public void relateSchool(Integer groupId, Integer schoolId) {
-        WeGroup weGroup = new WeGroup();
-        weGroup.setGroupId(groupId);
-        weGroup.setSchoolId(schoolId);
-        weGroup.setUpdatetime(LocalDateTime.now());
-        weGroupMapper.updateById(weGroup);
-    }
-
-    /**
-     * 设置群标签，多个时用逗号分隔
-     *
-     * @param groupId
-     * @param groupMark
-     */
-    @Override
-    public void setGroupMark(Integer groupId, String groupMark) {
-        WeGroup weGroup = new WeGroup();
-        weGroup.setGroupId(groupId);
-        weGroup.setGroupMark(groupMark);
-        weGroup.setUpdatetime(LocalDateTime.now());
-        weGroupMapper.updateById(weGroup);
     }
 }

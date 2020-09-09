@@ -15,7 +15,12 @@ public enum WeGroupVerifyFlag {
     /**
      * 审核未通过
      */
-    UNVERIFIED("2");
+    UNVERIFIED("2"),
+
+    /**
+     * 已被关闭
+     */
+    CLOSED("3");
 
     private String status;
 

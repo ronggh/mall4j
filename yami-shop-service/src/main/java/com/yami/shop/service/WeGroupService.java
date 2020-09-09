@@ -11,8 +11,8 @@ import com.yami.shop.bean.vo.WeGroupVO;
 
 public interface WeGroupService extends IService<WeGroup> {
     /**
-     * 根据状态，获取未审核，审核通过，审核未通过的社群列表,分页显示
-     * 
+     * 根据状态，获取未审核、审核通过、审核未通过、已关闭的社群列表,分页显示
+     * 支持根据社群名称进行搜索
      * @param dto
      * @param verifyFlag
      * @return
@@ -20,18 +20,19 @@ public interface WeGroupService extends IService<WeGroup> {
     Page<WeGroupVO> getWeGroupList(WeGroupDTO dto, String verifyFlag);
 
     /**
-     *
+     * 获取所有的学校信息，支持按中英文学校名称搜索
      * @param schoolName
      * @return
      */
     List<WeGroupSchoolVO> getAllSchoolList(String schoolName);
 
     /**
-     * 搜索所有的被关闭的社群
+     * 暂时无用
+     * 搜索所有的删除状态的社群，
      * @param dto
      * @return
      */
-    Page<WeGroupVO> getClosedWeGroupList(WeGroupDTO dto);
+    Page<WeGroupVO> getDeletedWeGroupList(WeGroupDTO dto);
 
     /**
      * 设置群审核状态
@@ -42,29 +43,25 @@ public interface WeGroupService extends IService<WeGroup> {
     void verifyWeGroup(Integer groupId, String verifyFlag);
 
     /**
+     * 解禁社群
+     * @param groupId
+     */
+    void openGroup(Integer groupId);
+
+    /**
+     * 关闭社群
+     * @param groupId
+     */
+    void closeGroup(Integer groupId);
+
+    /**
      * 设置群：包括群标签、关联学校、设置管理员
      * @param dto
      */
     void adminGroup(WeGroupDTO dto);
 
     /**
-     * 社群关联到学校
-     * 
-     * @param groupId
-     * @param schoolId
-     */
-    void relateSchool(Integer groupId, Integer schoolId);
-
-    /**
-     * 设置群标签，多个时用逗号分隔
-     * 
-     * @param groupId
-     * @param groupMark
-     */
-    void setGroupMark(Integer groupId, String groupMark);
-
-    /**
-     * 设置社群状态
+     * 设置社群状态，暂时没用
      * 
      * @param groupId
      * @param groupStatus：“1”：有效群；“0”：无效群
@@ -77,6 +74,5 @@ public interface WeGroupService extends IService<WeGroup> {
      * @return
      */
     WeGroupVO getGroupDetail(Integer groupId);
-
 
 }

@@ -32,7 +32,12 @@ public class WeNoteServiceImpl extends ServiceImpl<WeNoteMapper, WeNote> impleme
         Page<WeNoteVO> page = new Page<>();
         page.setCurrent(dto.getCurrentPage());
         page.setSize(dto.getPageSize());
-        String content = "%" + dto.getContent() +"%";
+
+        String content = "%%";
+
+        if( null!= dto.getContent()){
+            content = "%" + dto.getContent() +"%";
+        }
 
         //
         List<WeNoteVO> list = weNoteMapper.getNoteList(page,content);

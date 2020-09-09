@@ -47,8 +47,8 @@ public class WeNoteController {
      * @return
      */
     @ApiOperation(position = 2, value = "2-获取笔记详情", notes = "获取笔记详情")
-    @RequestMapping(value = "/list/noteDetail", method = RequestMethod.POST)
-    @PreAuthorize("@pms.hasPermission('note:list:noteDetail')")
+    @RequestMapping(value = "/info/noteDetail", method = RequestMethod.POST)
+    @PreAuthorize("@pms.hasPermission('note:info:noteDetail')")
     public ResponseEntity<WeNoteDetailVO> getNoteDetail(@RequestBody WeNoteIdDTO dto) {
         Integer noteId = dto.getNoteId();
         WeNoteDetailVO weNoteDetailVO = weNoteService.getNoteDetail(noteId);

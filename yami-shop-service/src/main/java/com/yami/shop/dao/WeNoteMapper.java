@@ -14,12 +14,13 @@ import com.yami.shop.bean.vo.WeNoteVO;
 public interface WeNoteMapper extends BaseMapper<WeNote> {
 
     /**
-     * 获取笔记列表，分页显示
+     * 获取笔记列表，按发布更新的最后时间降序排列，分页显示
      * @param page
      * @param content
      * @return
      */
     @Select("select n.note_id,n.title,n.content,n.topic_id,n.location,n.create_uid,n.group_id, "
+            + " n.is_hide, n.is_formal, n.is_sync, n.topic_id, t.topic_name, "
             + "  n.note_mark,n.praise_num,n.collet_num,n.comment_num,n.score,n.status,n.createtime,n.updatetime,"
             + "  u.nickname,u.real_name,u.head_img,d.degree_name,s.school_cnname,s.school_enname,g.group_name "
             + " from we_note n "
@@ -27,7 +28,8 @@ public interface WeNoteMapper extends BaseMapper<WeNote> {
             + " left join we_degree d on d.degree_id = u.degree_id "
             + " left join we_school s on u.school_id = s.school_id "
             + " left join we_group g on n.group_id = g.group_id "
-            + " where n.status = '1' and n.is_formal = '1' and (n.title like #{content} or n.content like #{content} )")
+            + " left join we_topic t on n.topic_id = t.topic_id "
+            + " where n.status = '1' and (n.title like #{content} or n.content like #{content} ) order by n.updatetime desc")
     List<WeNoteVO> getNoteList(@Param("page") Page<WeNoteVO> page, @Param("content") String content);
 
     /**
@@ -36,6 +38,7 @@ public interface WeNoteMapper extends BaseMapper<WeNote> {
      * @return
      */
     @Select("select n.note_id,n.title,n.content,n.topic_id,n.location,n.create_uid,n.group_id, "
+            + " n.is_hide, n.is_formal, n.is_sync,  n.topic_id, t.topic_name,"
             + " n.note_mark,n.praise_num,n.collet_num,n.comment_num,n.score,n.status,n.createtime,n.updatetime,"
             + " u.nickname,u.real_name,u.head_img,d.degree_name,s.school_cnname,s.school_enname,g.group_name "
             + " from we_note n "
@@ -43,6 +46,7 @@ public interface WeNoteMapper extends BaseMapper<WeNote> {
             + " left join we_degree d on d.degree_id = u.degree_id "
             + " left join we_school s on u.school_id = s.school_id "
             + " left join we_group g on n.group_id = g.group_id "
+            + " left join we_topic t on n.topic_id = t.topic_id "
             + " where n.status = '1' and n.note_id =  #{noteId}")
     WeNoteVO getNoteDetail(@Param("noteId") Integer noteId);
 
@@ -51,6 +55,6 @@ public interface WeNoteMapper extends BaseMapper<WeNote> {
      * @param noteId
      * @return
      */
-    @Select("select note_id,img_url,img_order from we_note_image where status='1' and note_id=#{noteId} order by img_order")
+    @Select("select id, note_id,img_url,img_order from we_note_image where status='1' and note_id=#{noteId} order by img_order")
     List<WeNoteImageVO> getNoteImageList(@Param("noteId") Integer noteId);
 }
