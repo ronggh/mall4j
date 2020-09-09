@@ -56,30 +56,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         return page;
     }
 
-    /**
-     * 暂时没用
-     * 分页显示所有删除状态的社群，支持按社群名称搜索
-     * 
-     * @param dto
-     * @return
-     */
-    @Override
-    public Page<WeGroupVO> getDeletedWeGroupList(WeGroupDTO dto) {
-        Page<WeGroupVO> page = new Page<>();
-        page.setCurrent(dto.getCurrentPage());
-        page.setSize(dto.getPageSize());
 
-        String groupName = "%%";
-        if (null != dto.getGroupName()) {
-            groupName = "%" + dto.getGroupName() + "%";
-        }
-
-        //
-        List<WeGroupVO> list = weGroupMapper.getDeletedWeGroupList(page, groupName);
-        page.setRecords(list);
-
-        return page;
-    }
 
     /**
      * 社群审核
@@ -121,21 +98,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     public void closeGroup(Integer groupId){
         verifyWeGroup(groupId,WeGroupVerifyFlag.CLOSED.value());
     }
-    /**
-     * 暂时没用
-     * 设置社群删除状态
-     *
-     * @param groupId
-     * @param groupStatus：“1”：有效数据；“0”：无效数据
-     */
-    @Override
-    public void setGroupStatus(Integer groupId, String groupStatus) {
-        WeGroup weGroup = new WeGroup();
-        weGroup.setGroupId(groupId);
-        weGroup.setStatus(groupStatus);
-        weGroup.setUpdatetime(LocalDateTime.now());
-        weGroupMapper.updateById(weGroup);
-    }
+
 
     /**
      * 根据groupId获取社群详细信息，包括成员和管理员列表
@@ -202,5 +165,46 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         }
         List<WeGroupSchoolVO> list = weGroupMapper.getAllSchoolList(sName);
         return list;
+    }
+
+    /**
+     * 暂时没用
+     * 分页显示所有删除状态的社群，支持按社群名称搜索
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public Page<WeGroupVO> getDeletedWeGroupList(WeGroupDTO dto) {
+        Page<WeGroupVO> page = new Page<>();
+        page.setCurrent(dto.getCurrentPage());
+        page.setSize(dto.getPageSize());
+
+        String groupName = "%%";
+        if (null != dto.getGroupName()) {
+            groupName = "%" + dto.getGroupName() + "%";
+        }
+
+        //
+        List<WeGroupVO> list = weGroupMapper.getDeletedWeGroupList(page, groupName);
+        page.setRecords(list);
+
+        return page;
+    }
+
+    /**
+     * 暂时没用
+     * 设置社群删除状态
+     *
+     * @param groupId
+     * @param groupStatus：“1”：有效数据；“0”：无效数据
+     */
+    @Override
+    public void setGroupStatus(Integer groupId, String groupStatus) {
+        WeGroup weGroup = new WeGroup();
+        weGroup.setGroupId(groupId);
+        weGroup.setStatus(groupStatus);
+        weGroup.setUpdatetime(LocalDateTime.now());
+        weGroupMapper.updateById(weGroup);
     }
 }

@@ -9,6 +9,9 @@ import com.yami.shop.bean.model.WeGroup;
 import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupVO;
 
+/**
+ * @author : YaJie
+ */
 public interface WeGroupService extends IService<WeGroup> {
     /**
      * 根据状态，获取未审核、审核通过、审核未通过、已关闭的社群列表,分页显示
@@ -26,13 +29,6 @@ public interface WeGroupService extends IService<WeGroup> {
      */
     List<WeGroupSchoolVO> getAllSchoolList(String schoolName);
 
-    /**
-     * 暂时无用
-     * 搜索所有的删除状态的社群，
-     * @param dto
-     * @return
-     */
-    Page<WeGroupVO> getDeletedWeGroupList(WeGroupDTO dto);
 
     /**
      * 设置群审核状态
@@ -60,13 +56,6 @@ public interface WeGroupService extends IService<WeGroup> {
      */
     void adminGroup(WeGroupDTO dto);
 
-    /**
-     * 设置社群状态，暂时没用
-     * 
-     * @param groupId
-     * @param groupStatus：“1”：有效群；“0”：无效群
-     */
-    void setGroupStatus(Integer groupId, String groupStatus);
 
     /**
      * 根据groupId获取社群详细信息，包括成员和管理员列表
@@ -75,4 +64,19 @@ public interface WeGroupService extends IService<WeGroup> {
      */
     WeGroupVO getGroupDetail(Integer groupId);
 
+    /**
+     * 暂时无用
+     * 搜索所有的删除状态的社群，
+     * @param dto
+     * @return
+     */
+    Page<WeGroupVO> getDeletedWeGroupList(WeGroupDTO dto);
+
+    /**
+     * 设置社群状态，暂时没用
+     *
+     * @param groupId
+     * @param groupStatus：“1”：有效群；“0”：无效群
+     */
+    void setGroupStatus(Integer groupId, String groupStatus);
 }

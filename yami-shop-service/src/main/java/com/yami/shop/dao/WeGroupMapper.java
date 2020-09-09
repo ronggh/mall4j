@@ -29,21 +29,6 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
             + " on gu.school_id = s.school_id ")
     List<WeGroupVO> getWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag,@Param("groupName") String groupName);
 
-    /**
-     * 暂时没用
-     * 根据名称，搜索删除状态的社群列表，分页显示，支持世社群名称搜索
-     * @param page
-     * @param groupName
-     * @return
-     */
-    @Select("select gu.group_id,gu.group_name,gu.group_desc,gu.apply_reason,gu.group_head_img,gu.verify_flag,gu.group_mark,gu.member_tip,gu.note_tip,gu.create_uid,gu.nickname,gu.real_name,gu.school_id,s.school_enname,s.school_cnname "
-            + " from ( select g.group_id,g.group_name,g.group_desc,g.apply_reason,g.group_head_img,g.verify_flag,g.group_mark,g.member_tip,g.note_tip,g.create_uid,u.nickname,u.real_name,g.school_id "
-            + " from we_group g,we_user u "
-            + " where g.create_uid = u.uid and  g.status = '0' and g.group_name like #{groupName}) as gu "
-            + " LEFT OUTER JOIN we_school s "
-            + " on gu.school_id = s.school_id ")
-    List<WeGroupVO> getDeletedWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("groupName") String groupName);
-
 
     /**
      * 根据groupId获取社群信息
@@ -84,4 +69,19 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
             + " and (school_cnname like #{schoolName} or school_enname like #{schoolName})"
             + " order by convert(school_cnname using gbk) ")
     List<WeGroupSchoolVO> getAllSchoolList(@Param("schoolName") String schoolName);
+
+    /**
+     * 暂时没用
+     * 根据名称，搜索删除状态的社群列表，分页显示，支持世社群名称搜索
+     * @param page
+     * @param groupName
+     * @return
+     */
+    @Select("select gu.group_id,gu.group_name,gu.group_desc,gu.apply_reason,gu.group_head_img,gu.verify_flag,gu.group_mark,gu.member_tip,gu.note_tip,gu.create_uid,gu.nickname,gu.real_name,gu.school_id,s.school_enname,s.school_cnname "
+            + " from ( select g.group_id,g.group_name,g.group_desc,g.apply_reason,g.group_head_img,g.verify_flag,g.group_mark,g.member_tip,g.note_tip,g.create_uid,u.nickname,u.real_name,g.school_id "
+            + " from we_group g,we_user u "
+            + " where g.create_uid = u.uid and  g.status = '0' and g.group_name like #{groupName}) as gu "
+            + " LEFT OUTER JOIN we_school s "
+            + " on gu.school_id = s.school_id ")
+    List<WeGroupVO> getDeletedWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("groupName") String groupName);
 }
