@@ -1,11 +1,9 @@
 package com.yami.shop.bean.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import lombok.Data;
 
@@ -22,11 +20,13 @@ public class WeGroup implements Serializable {
     private String groupHeadImg;
     private String verifyFlag;
     private Integer createUid;
+    // 关联学校可以为null
+    @TableField(strategy=FieldStrategy.IGNORED)
     private Integer schoolId;
     private String memberTip;
     private String noteTip;
     private String status;
     private String groupMark;
-    private LocalDateTime createtime;
-    private LocalDateTime updatetime;
+    private Date createtime;
+    private Date updatetime;
 }

@@ -1,6 +1,6 @@
 package com.yami.shop.service.impl;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     private WeGroupMemberMapper weGroupMemberMapper;
 
     /**
-     * 根据verifyFlag的值，分别获取未审核、审核通过、审核未通过、被关闭的社群列表，
-     * 分页显示，支持按社群名称搜索
+     * 根据verifyFlag的值，分别获取未审核、审核通过、审核未通过、被关闭的社群列表， 分页显示，支持按社群名称搜索
      * 
      * @param dto
      * @param verifyFlag
@@ -46,17 +45,15 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
 
         String groupName = dto.getGroupName();
         String gName = "%%";
-        if(null != groupName && !"".equals(groupName)){
-            gName = "%"+groupName +"%";
+        if (null != groupName && !"".equals(groupName)) {
+            gName = "%" + groupName + "%";
         }
         //
-        List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag,gName);
+        List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag, gName);
         page.setRecords(list);
 
         return page;
     }
-
-
 
     /**
      * 社群审核
@@ -67,38 +64,39 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     @Override
     public void verifyWeGroup(Integer groupId, String verifyFlag) {
         // 判断
-        if(groupId == null || groupId <= 0 )
-        {
+        if (groupId == null || groupId <= 0) {
             return;
         }
 
         //
         WeGroup weGroup = new WeGroup();
+
         weGroup.setGroupId(groupId);
         weGroup.setVerifyFlag(verifyFlag);
-        weGroup.setUpdatetime(LocalDateTime.now());
+        weGroup.setUpdatetime(new Date());
         //
         weGroupMapper.updateById(weGroup);
     }
 
     /**
      * 解禁社群
+     * 
      * @param groupId
      */
     @Override
-    public void openGroup(Integer groupId){
-        verifyWeGroup(groupId,WeGroupVerifyFlag.VERIFIED.value());
+    public void openGroup(Integer groupId) {
+        verifyWeGroup(groupId, WeGroupVerifyFlag.VERIFIED.value());
     }
 
     /**
      * 关闭社群
+     * 
      * @param groupId
      */
     @Override
-    public void closeGroup(Integer groupId){
-        verifyWeGroup(groupId,WeGroupVerifyFlag.CLOSED.value());
+    public void closeGroup(Integer groupId) {
+        verifyWeGroup(groupId, WeGroupVerifyFlag.CLOSED.value());
     }
-
 
     /**
      * 根据groupId获取社群详细信息，包括成员和管理员列表
@@ -127,49 +125,50 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         Integer groupId = dto.getGroupId();
         Integer schoolId = dto.getSchoolId();
         String groupMark = dto.getGroupMark();
-        if(null == groupId || groupId == 0){
+        //
+        if (null == groupId || groupId == 0) {
             return;
         }
         WeGroup weGroup = new WeGroup();
         weGroup.setGroupId(groupId);
-        weGroup.setUpdatetime(LocalDateTime.now());
-        if (null != schoolId) {
-            weGroup.setSchoolId(schoolId);
-        }
+        weGroup.setUpdatetime(new Date());
+
+        // 关联学校可以为空
+        weGroup.setSchoolId(schoolId);
+
         if (null != groupMark) {
             weGroup.setGroupMark(groupMark);
         }
         weGroupMapper.updateById(weGroup);
 
         // 设置管理员
+        // 先清除原来的管理员
+        weGroupMemberMapper.clearGroupAdmins(groupId);
         List<Integer> admins = dto.getAdmins();
         if (null != admins && admins.size() > 0) {
-            // 先清除原来的管理员
-            weGroupMemberMapper.clearGroupAdmins(groupId);
             // 设置新的管理员
             weGroupMemberMapper.setGroupAdmins(groupId, admins);
         }
-
     }
 
     /**
      * 获取所有学校列表，支持按学校中英文名称搜索
+     * 
      * @param schoolName
      * @return
      */
     @Override
-    public List<WeGroupSchoolVO> getAllSchoolList(String schoolName){
+    public List<WeGroupSchoolVO> getAllSchoolList(String schoolName) {
         String sName = "%%";
-        if( null != schoolName && !"".equals(schoolName)){
-            sName ="%" + schoolName +"%";
+        if (null != schoolName && !"".equals(schoolName)) {
+            sName = "%" + schoolName + "%";
         }
         List<WeGroupSchoolVO> list = weGroupMapper.getAllSchoolList(sName);
         return list;
     }
 
     /**
-     * 暂时没用
-     * 分页显示所有删除状态的社群，支持按社群名称搜索
+     * 暂时没用 分页显示所有删除状态的社群，支持按社群名称搜索
      *
      * @param dto
      * @return
@@ -193,8 +192,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     }
 
     /**
-     * 暂时没用
-     * 设置社群删除状态
+     * 暂时没用 设置社群删除状态
      *
      * @param groupId
      * @param groupStatus：“1”：有效数据；“0”：无效数据
@@ -204,7 +202,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         WeGroup weGroup = new WeGroup();
         weGroup.setGroupId(groupId);
         weGroup.setStatus(groupStatus);
-        weGroup.setUpdatetime(LocalDateTime.now());
+        weGroup.setUpdatetime(new Date());
         weGroupMapper.updateById(weGroup);
     }
 }

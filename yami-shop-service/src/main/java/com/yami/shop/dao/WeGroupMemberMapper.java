@@ -10,7 +10,6 @@ import com.yami.shop.bean.model.WeGroupMember;
 
 public interface WeGroupMemberMapper extends BaseMapper<WeGroupMember> {
     /**
-     * 
      * @param groupId
      */
     @Update("update we_group_member set user_role='2' where status='1' and group_id=#{groupId}")

@@ -27,11 +27,11 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
         </dependency>
-        <dependency>
-        <groupId>com.yami.shop</groupId>
-        <artifactId>yami-shop-security</artifactId>
-        <version>${yami.shop.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.yami.shop</groupId>-->
+            <!--<artifactId>yami-shop-security</artifactId>-->
+            <!--<version>${yami.shop.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.yami.shop</groupId>
             <artifactId>yami-shop-quartz</artifactId>

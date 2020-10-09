@@ -79,4 +79,5 @@ public interface WeGroupService extends IService<WeGroup> {
      * @param groupStatus：“1”：有效群；“0”：无效群
      */
     void setGroupStatus(Integer groupId, String groupStatus);
+
 }

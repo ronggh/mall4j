@@ -73,6 +73,7 @@ public class YamiSysUserDetailsServiceImpl implements YamiUserDetailsService {
      *            用户名称
      * @return
      */
+
     private YamiSysUser getUserDetails(String username) {
         SysUser sysUser = sysUserMapper.selectByUsername(username);
 
