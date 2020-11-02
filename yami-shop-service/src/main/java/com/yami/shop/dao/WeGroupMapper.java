@@ -21,12 +21,12 @@ public interface WeGroupMapper extends BaseMapper<WeGroup> {
      * @param groupName
      * @return
      */
-    @Select("select gu.group_id,gu.group_name,gu.group_desc,gu.apply_reason,gu.group_head_img,gu.verify_flag,gu.group_mark,gu.member_tip,gu.note_tip,gu.create_uid,gu.nickname,gu.real_name,gu.school_id,s.school_enname,s.school_cnname "
-            + " from ( select g.group_id,g.group_name,g.group_desc,g.apply_reason,g.group_head_img,g.verify_flag,g.group_mark,g.member_tip,g.note_tip,g.create_uid,u.nickname,u.real_name,g.school_id "
+    @Select("select gu.group_id,gu.group_name,gu.group_desc,gu.apply_reason,gu.group_head_img,gu.verify_flag,gu.group_mark,gu.member_tip,gu.note_tip,gu.create_uid,gu.nickname,gu.real_name,gu.school_id,s.school_enname,s.school_cnname,gu.createtime "
+            + " from ( select g.group_id,g.group_name,g.group_desc,g.apply_reason,g.group_head_img,g.verify_flag,g.group_mark,g.member_tip,g.note_tip,g.create_uid,u.nickname,u.real_name,g.school_id,g.createtime "
             + " from we_group g,we_user u "
             + " where g.create_uid = u.uid and g.verify_flag=#{verifyFlag} and g.status = '1' and g.group_name like #{groupName})  as gu  "
             + " LEFT JOIN we_school s "
-            + " on gu.school_id = s.school_id ")
+            + " on gu.school_id = s.school_id order by gu.createtime ")
     List<WeGroupVO> getWeGroupList(@Param("page") Page<WeGroupVO> page, @Param("verifyFlag") String verifyFlag,@Param("groupName") String groupName);
 
 

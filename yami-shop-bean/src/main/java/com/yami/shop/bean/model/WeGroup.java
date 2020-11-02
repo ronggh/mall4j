@@ -20,7 +20,10 @@ public class WeGroup implements Serializable {
     private String groupHeadImg;
     private String verifyFlag;
     private Integer createUid;
-    // 关联学校可以为null
+    /**
+     * 关联学校可以为null
+     * MyBatis默认对null值进行了过滤，需要忽略对空值的判断
+     */
     @TableField(strategy=FieldStrategy.IGNORED)
     private Integer schoolId;
     private String memberTip;
