@@ -116,7 +116,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
     }
 
     /**
-     * 设置群：包括群标签、关联学校、设置管理员
+     * 设置群：包括群标签、关联学校、设置管理员、加群门槛
      * 
      * @param dto
      */
@@ -125,6 +125,7 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         Integer groupId = dto.getGroupId();
         Integer schoolId = dto.getSchoolId();
         String groupMark = dto.getGroupMark();
+        Integer needAuth = dto.getNeedAuth();
         //
         if (null == groupId || groupId == 0) {
             return;
@@ -139,6 +140,13 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         if (null != groupMark) {
             weGroup.setGroupMark(groupMark);
         }
+
+        //
+        if (needAuth != null) {
+            weGroup.setNeedAuth(needAuth);
+        }
+
+        //
         weGroupMapper.updateById(weGroup);
 
         // 设置管理员

@@ -32,4 +32,5 @@ public class WeGroup implements Serializable {
     private String groupMark;
     private Date createtime;
     private Date updatetime;
+    private Integer needAuth;
 }

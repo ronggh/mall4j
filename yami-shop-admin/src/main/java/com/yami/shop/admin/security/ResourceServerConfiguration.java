@@ -48,12 +48,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                         "/doc.html",
                         "/swagger-ui.html",
                         "/swagger-resources/**",
-                        "/captcha.jpg").permitAll();
+                        "/captcha.jpg").permitAll()
 
-//                .and()
-//                .authorizeRequests()
-//                //配置所有访问控制，必须认证过后才可以访问
-//                .antMatchers("/**").authenticated();
+                .and()
+                .authorizeRequests()
+                //配置所有访问控制，必须认证过后才可以访问
+                .antMatchers("/**").authenticated();
 
         // @formatter:on
 

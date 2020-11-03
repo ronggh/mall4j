@@ -36,6 +36,9 @@ public class WeGroupVO implements Serializable {
     @ApiModelProperty(value = "社群标签")
     private String groupMark;
 
+    @ApiModelProperty(value = "加入社群是否需要学历认证")
+    private Integer needAuth;
+
     @ApiModelProperty(value = "创建群的用户id")
     private Integer createUid;
     @ApiModelProperty(value = "创建群的用户昵称")

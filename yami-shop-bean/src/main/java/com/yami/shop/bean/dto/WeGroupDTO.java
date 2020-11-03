@@ -26,6 +26,8 @@ public class WeGroupDTO extends BaseDTO implements Serializable {
     private String groupMark;
     @ApiModelProperty(value = "社群状态，1：有效，0：无效")
     private String status;
+    @ApiModelProperty(value = "加入社群是否需要学历认证")
+    private Integer needAuth;
     @ApiModelProperty(value = "群管理员")
     private List<Integer> admins;
 }

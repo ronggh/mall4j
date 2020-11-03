@@ -125,7 +125,7 @@ public class WeGroupController {
      * @return
      */
     @ApiOperation(position = 7, value = "7-设置社群", notes = "包括标签、关联学校、设置管理员")
-    @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.groupMark","dto.schoolId","dto.admins"})
+    @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.groupMark","dto.needAuth","dto.schoolId","dto.admins"})
     @RequestMapping(value = "/info/adminGroup", method = RequestMethod.POST)
 //    @PreAuthorize("@pms.hasPermission('group:info:adminGroup')")
     public ResponseEntity<String> adminGroup(@RequestBody WeGroupDTO dto) {
