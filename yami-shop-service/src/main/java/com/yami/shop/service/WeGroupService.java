@@ -2,6 +2,8 @@ package com.yami.shop.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yami.shop.bean.dto.WeGroupDTO;
@@ -54,7 +56,7 @@ public interface WeGroupService extends IService<WeGroup> {
      * 设置群：包括群标签、关联学校、设置管理员
      * @param dto
      */
-    void adminGroup(WeGroupDTO dto);
+    ResponseEntity<String> adminGroup(WeGroupDTO dto);
 
 
     /**

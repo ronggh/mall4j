@@ -51,11 +51,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                         "/captcha.jpg").permitAll()
 
                 .and()
-                .authorizeRequests()
+                .authorizeRequests() ;
                 //配置所有访问控制，必须认证过后才可以访问
-                .antMatchers("/**").authenticated();
+//                .antMatchers("/**").authenticated();
 
-        // @formatter:on
 
     }
 }

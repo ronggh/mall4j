@@ -36,6 +36,7 @@ public class WeGroupVO implements Serializable {
     @ApiModelProperty(value = "社群标签")
     private String groupMark;
 
+    // 2020-11-03增加
     @ApiModelProperty(value = "加入社群是否需要学历认证")
     private Integer needAuth;
 
@@ -46,12 +47,7 @@ public class WeGroupVO implements Serializable {
     @ApiModelProperty(value = "创建群的用户真名")
     private String realName;
 
-    @ApiModelProperty(value = "群所属的学校id")
-    private Integer schoolId;
-    @ApiModelProperty(value = "群所属的学校英文名称")
-    private String schoolEnname;
-    @ApiModelProperty(value = "群所属的学校中文名称")
-    private String schoolCnname;
+
 
     /**
      * 社群成员列表
@@ -64,5 +60,11 @@ public class WeGroupVO implements Serializable {
      */
     @ApiModelProperty(value = "社群管理员列表")
     List<WeGroupUserVO> groupAdmins;
+
+    /**
+     * 社群关联到的学校列表
+     */
+    @ApiModelProperty(value = "社群关联到的学校列表")
+    List<WeGroupSchoolVO> groupSchools;
 
 }

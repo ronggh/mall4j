@@ -4,18 +4,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.aliyuncs.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yami.shop.bean.dto.WeGroupDTO;
 import com.yami.shop.bean.enums.WeGroupVerifyFlag;
 import com.yami.shop.bean.model.WeGroup;
+import com.yami.shop.bean.model.WeGroupSchool;
 import com.yami.shop.bean.vo.WeGroupSchoolVO;
 import com.yami.shop.bean.vo.WeGroupUserVO;
 import com.yami.shop.bean.vo.WeGroupVO;
 import com.yami.shop.dao.WeGroupMapper;
 import com.yami.shop.dao.WeGroupMemberMapper;
+import com.yami.shop.dao.WeGroupSchoolMapper;
 import com.yami.shop.service.WeGroupService;
 
 /**
@@ -28,6 +33,9 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
 
     @Autowired
     private WeGroupMemberMapper weGroupMemberMapper;
+
+    @Autowired
+    private WeGroupSchoolMapper weGroupSchoolMapper;
 
     /**
      * 根据verifyFlag的值，分别获取未审核、审核通过、审核未通过、被关闭的社群列表， 分页显示，支持按社群名称搜索
@@ -50,6 +58,12 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         }
         //
         List<WeGroupVO> list = weGroupMapper.getWeGroupList(page, verifyFlag, gName);
+        if (null != list && list.size() > 0) {
+            for (WeGroupVO groupVO : list) {
+                List<WeGroupSchoolVO> schools = weGroupMapper.getGroupSchoolList(groupVO.getGroupId());
+                groupVO.setGroupSchools(schools);
+            }
+        }
         page.setRecords(list);
 
         return page;
@@ -109,54 +123,95 @@ public class WeGroupServiceImpl extends ServiceImpl<WeGroupMapper, WeGroup> impl
         WeGroupVO weGroupVO = weGroupMapper.getGroupVO(groupId);
         List<WeGroupUserVO> admins = weGroupMapper.getGroupMemberList(groupId, "1");
         List<WeGroupUserVO> members = weGroupMapper.getGroupMemberList(groupId, "2");
+        List<WeGroupSchoolVO> schools = weGroupMapper.getGroupSchoolList(groupId);
         weGroupVO.setGroupAdmins(admins);
         weGroupVO.setGroupMembers(members);
+        weGroupVO.setGroupSchools(schools);
 
         return weGroupVO;
     }
 
     /**
-     * 设置群：包括群标签、关联学校、设置管理员、加群门槛
-     * 
+     * 2020-12-09增加：可修改社群名称和简介 <br/>
+     * 7-设置群：包括群标签、关联学校、设置管理员
+     *
      * @param dto
      */
     @Override
-    public void adminGroup(WeGroupDTO dto) {
+    public ResponseEntity<String> adminGroup(WeGroupDTO dto) {
         Integer groupId = dto.getGroupId();
-        Integer schoolId = dto.getSchoolId();
+
         String groupMark = dto.getGroupMark();
-        Integer needAuth = dto.getNeedAuth();
-        //
+        String groupName = dto.getGroupName();
+        String groupDesc = dto.getGroupDesc();
+
+        // 1.
         if (null == groupId || groupId == 0) {
-            return;
-        }
-        WeGroup weGroup = new WeGroup();
-        weGroup.setGroupId(groupId);
-        weGroup.setUpdatetime(new Date());
-
-        // 关联学校可以为空
-        weGroup.setSchoolId(schoolId);
-
-        if (null != groupMark) {
-            weGroup.setGroupMark(groupMark);
+            return ResponseEntity.ok("请求参数错误");
         }
 
-        //
-        if (needAuth != null) {
-            weGroup.setNeedAuth(needAuth);
+        // 2.前端也需要控制不为空
+        if (StringUtils.isEmpty(groupName)) {
+            return ResponseEntity.ok("社群名称不能为空");
         }
 
-        //
-        weGroupMapper.updateById(weGroup);
-
-        // 设置管理员
-        // 先清除原来的管理员
-        weGroupMemberMapper.clearGroupAdmins(groupId);
-        List<Integer> admins = dto.getAdmins();
-        if (null != admins && admins.size() > 0) {
-            // 设置新的管理员
-            weGroupMemberMapper.setGroupAdmins(groupId, admins);
+        // 3. 判断名称是否重复, 排除自己
+        QueryWrapper<WeGroup> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("group_name", groupName).eq("status", "1").ne("group_id", groupId);
+        Integer result = weGroupMapper.selectCount(queryWrapper);
+        if (result > 0) {
+            return ResponseEntity.ok("该社群名称已存在");
         }
+
+        // 4. 保存
+        WeGroup weGroup = weGroupMapper.selectById(groupId);
+        if (null != weGroup) {
+            // 4.1 更新社群信息
+            weGroup.setUpdatetime(new Date());
+
+            if (null != groupMark) {
+                weGroup.setGroupMark(groupMark);
+            }
+
+            weGroup.setGroupName(groupName);
+            if (null != groupDesc) {
+                weGroup.setGroupDesc(groupDesc);
+            }
+            weGroupMapper.updateById(weGroup);
+
+            // 4.2 设置管理员
+            List<Integer> admins = dto.getAdmins();
+            if (null != admins && admins.size() > 0) {
+                // 先清除原来的管理员
+                weGroupMemberMapper.clearGroupAdmins(groupId);
+                // 设置新的管理员
+                weGroupMemberMapper.setGroupAdmins(groupId, admins);
+            }
+
+            // 4.3 关联学校
+            List<Integer> schoolIds = dto.getSchoolIds();
+            System.out.println("schoolIds ====" + schoolIds.toArray().toString());
+            if (null != schoolIds) {
+                // 先清除原来关联的学校
+                weGroupSchoolMapper.clearGroupSchools(groupId);
+                // 设置新的关联学校
+                for (Integer schoolId : schoolIds) {
+                    WeGroupSchool entity = new WeGroupSchool();
+                    entity.setGroupId(groupId);
+                    entity.setSchoolId(schoolId);
+                    entity.setCreatetime(new Date());
+                    entity.setUpdatetime(new Date());
+                    weGroupSchoolMapper.insert(entity);
+                }
+
+            }
+
+            return ResponseEntity.ok("success");
+        }
+
+        // 5.
+        return ResponseEntity.ok("不存在该条数据");
+
     }
 
     /**

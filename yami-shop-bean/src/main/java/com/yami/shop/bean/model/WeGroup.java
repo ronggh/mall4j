@@ -32,5 +32,6 @@ public class WeGroup implements Serializable {
     private String groupMark;
     private Date createtime;
     private Date updatetime;
+    // 2020-11-03增加
     private Integer needAuth;
 }

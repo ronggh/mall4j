@@ -120,17 +120,18 @@ public class WeGroupController {
     }
 
     /**
-     * 设置群:包括标签、关联学校、设置管理员
-     * @param dto
-     * @return
+     * 2020-12-09 : 增加改群名称和简介
+     * 设置群:
+     *  包括标签、关联学校、设置管理员
+     * @param dto 社群DTO
+     * @return "success" or error message
      */
     @ApiOperation(position = 7, value = "7-设置社群", notes = "包括标签、关联学校、设置管理员")
-    @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.groupMark","dto.needAuth","dto.schoolId","dto.admins"})
+    @ApiOperationSupport(includeParameters = {"dto.groupId", "dto.groupName","dto.groupDesc","dto.groupMark","dto.needAuth","dto.schoolId","dto.admins"})
     @RequestMapping(value = "/info/adminGroup", method = RequestMethod.POST)
 //    @PreAuthorize("@pms.hasPermission('group:info:adminGroup')")
     public ResponseEntity<String> adminGroup(@RequestBody WeGroupDTO dto) {
-        weGroupService.adminGroup(dto);
-        return ResponseEntity.ok("success");
+        return weGroupService.adminGroup(dto);
     }
 
 
